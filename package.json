@@ -1,0 +1,23 @@
+{
+  "name": "seniordesign",
+  "version": "1.0.0",
+  "description": "Correlation engine for Camgian Egburt",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blackm3/SeniorDesign.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blackm3/SeniorDesign/issues"
+  },
+  "homepage": "https://github.com/blackm3/SeniorDesign#readme",
+  "dependencies": {
+    "express": "^4.14.1"
+  }
+}

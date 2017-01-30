@@ -1,0 +1,10 @@
+img.logo {
+    display: block;
+    width: 80%;
+    margin: 50px auto auto auto;
+}
+
+div.upload {
+    width: 50px;
+    margin: 50px auto 0 auto;
+}
