@@ -1,15 +1,12 @@
 #Matt Black
 # Reads in N vectors - returns NxN correlation matrix
 
-from scipy.stats import linregress
+from scipy.stats import spearmanr
 import numpy as np
-import pandas as pd
-import seaborn as sns
+
 
 def correlationMatrix(*args):
 
-    f = args[-1]
-    args = args[:-1]
     n = len(args)
     mat = np.zeros(shape=(n,n))
 
@@ -20,7 +17,7 @@ def correlationMatrix(*args):
             if i == j:
                 mat[i][j] = 1.0
             else:
-                mat[i][j] = f(args[i], args[j])
+                mat[i][j] = (args[i], args[j])
 
 
     #fill in rest of matrix by symmetry
@@ -32,5 +29,5 @@ def correlationMatrix(*args):
     return mat
 
 
-def pearsonCoeff(x, y):
-    return linregress(x,y)[2]
+def correlate(x, y):
+    return spearmanr(x,y)[2]
