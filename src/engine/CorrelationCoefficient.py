@@ -6,7 +6,6 @@ import numpy as np
 
 
 def correlationMatrix(*args):
-
     n = len(args)
     mat = np.zeros(shape=(n,n))
 
@@ -24,7 +23,6 @@ def correlationMatrix(*args):
     for j in range(0, n):
         for i in range(j+1, n):
             mat[i][j] = mat[j][i]
-
 
     return mat
 

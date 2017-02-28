@@ -21,7 +21,8 @@ PythonShell.defaultOptions = {
 };
 
 app.post('/v1/correlate', function(req, res) {
-    let dataFile = req.files.srcData;
+    let dataFile = req.files.srcData,
+        corrMatrix = [];
 
     dataFile.mv(path.join(__dirname, '../engine/data.csv'), function(err) {
         if (err) {
@@ -29,6 +30,7 @@ app.post('/v1/correlate', function(req, res) {
         } else {
             let pyShell = new PythonShell('Main.py');
             pyShell.on('message', function(message) {
+                corrMatrix = JSON.parse(message);
                 console.log(message);
             });
             pyShell.end(function(err) {
@@ -36,7 +38,7 @@ app.post('/v1/correlate', function(req, res) {
                     throw err;
                 }
                 console.log('finished');
-                res.status(200).send();
+                res.status(200).send(corrMatrix);
             })
         }
     });
