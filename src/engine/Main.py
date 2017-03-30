@@ -36,9 +36,6 @@ with open(os.path.join(os.path.dirname(__file__), 'data/data.csv'), newline='') 
                        header=None,
                        names=[('s' + str(i)) for i in range(int(cols / 2))]).values
 
-    data.plot()
-    plt.show()
-
     #acf = stattools.acf(data, fft=True, qstat=True, nlags=100)
     matrix = spearmanr(data).correlation
 
