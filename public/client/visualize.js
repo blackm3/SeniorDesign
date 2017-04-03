@@ -17,7 +17,7 @@ $(document).ready(function() {
                     "group": sNum
                 });
                 cArray.forEach(function(corr, tNum) {
-                    if (Math.abs(corr) >= 0.2) {
+                    if (Math.abs(corr) >= 0.4 && tNum != sNum) {
                         links.push({
                             "source": curID,
                             "target": "sensor_" + tNum,
@@ -39,8 +39,8 @@ $(document).ready(function() {
             let color = d3.scaleOrdinal(d3.schemeCategory20);
 
             let simulation = d3.forceSimulation()
-                    .force("link", d3.forceLink().id(function(d) { return d.id; }))
-                    .force("charge", d3.forceManyBody().strength(-10000))
+                    .force("link", d3.forceLink().distance(300).id(function(d) { return d.id; }))
+                    .force("charge", d3.forceManyBody())
                     .force("center", d3.forceCenter(width / 2, height / 2));
 
             let link = svg.append("g")
@@ -48,16 +48,16 @@ $(document).ready(function() {
                 .selectAll("line")
                 .data(graph.links)
                 .enter().append("line")
-                .attr("stroke", function(d) {
+                .style("opacity", function(d) { return Math.sqrt(d.value); })
+                .style("stroke", function(d) {
                     if (d.value > 0) {
                         return "#8B0000";
                     } else {
                         return "#008000"
                     }
                 })
-                .attr("stroke-width", function(d) { return d.value * d.value; });
+                .style("stroke-width", "3px");
 
-            console.log(link);
             link.append("title").text(function(d) {return d.value});
 
             let node = svg.append("g")
@@ -65,8 +65,8 @@ $(document).ready(function() {
                 .selectAll("circle")
                 .data(graph.nodes)
                 .enter().append("circle")
-                .attr("r", 10)
-                .attr("fill", function(d) { return color(d.group); })
+                .attr("r", 8)
+                .attr("fill", "gray")
                 .call(d3.drag()
                         .on("start", dragstarted)
                         .on("drag", dragged)
