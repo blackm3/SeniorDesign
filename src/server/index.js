@@ -37,11 +37,19 @@ app.post('/v1/correlate', function(req, res) {
                 if (err) {
                     throw err;
                 }
-                console.log('finished');
-                res.status(200).send(corrMatrix);
+                fs.writeFile(path.join(__dirname, "corrMatrix.json"), JSON.stringify(corrMatrix), "utf8", (err) => {
+                    if (err) throw err;
+                    console.log('file written');
+                });
+                res.redirect('/visualize.html');
             })
         }
     });
+});
+
+app.get('/v1/visualize', function(req, res) {
+    let corrMatrix = require(path.join(__dirname, 'corrMatrix.json'));
+    res.status(200).send(corrMatrix);
 });
 
 let server = app.listen(8080, function() {

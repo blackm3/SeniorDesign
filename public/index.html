@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>Correlation Engine</title>
     <link rel="stylesheet" href="css/app.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="client/home.js"></script>
 </head>
 <body>
     <img class="logo" src="http://www.advantagecapimpact.com/wp-content/uploads/2013/11/CamgianLogo.jpg" />
     <div class="upload">
-        <form action="/v1/correlate/" method="post" enctype="multipart/form-data">
-            <input type="file" name="srcData" />
-            <input type="submit" value="Generate" />
+        <form class="upload" action="/v1/correlate/" method="post" enctype="multipart/form-data">
+            <input id="file" type="file" name="srcData" />
+            <input id="submit" type="submit" value="Generate" />
          </form>
     </div>
 </body>
