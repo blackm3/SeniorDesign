@@ -24,7 +24,7 @@ app.post('/v1/correlate', function(req, res) {
     let dataFile = req.files.srcData,
         corrMatrix = [];
 
-    dataFile.mv(path.join(__dirname, '../engine/data.csv'), function(err) {
+    dataFile.mv(path.join(__dirname, 'data.csv'), function(err) {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -41,6 +41,7 @@ app.post('/v1/correlate', function(req, res) {
                     if (err) throw err;
                     console.log('file written');
                 });
+                fs.unlink(path.join(__dirname, 'data.csv'), (err) => { if (err) throw err; });
                 res.redirect('/visualize.html');
             })
         }

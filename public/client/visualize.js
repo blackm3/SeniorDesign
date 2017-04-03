@@ -48,7 +48,6 @@ $(document).ready(function() {
                 .selectAll("line")
                 .data(graph.links)
                 .enter().append("line")
-                .style("opacity", function(d) { return Math.sqrt(d.value); })
                 .style("stroke", function(d) {
                     if (d.value > 0) {
                         return "#8B0000";
@@ -56,7 +55,7 @@ $(document).ready(function() {
                         return "#008000"
                     }
                 })
-                .style("stroke-width", "3px");
+                .style("stroke-width", function(d) { return d.value * 4; });
 
             link.append("title").text(function(d) {return d.value});
 
