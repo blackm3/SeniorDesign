@@ -4,7 +4,7 @@
 
 
 import seaborn as sns
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt, mpld3
 
 
 def visualize(mat):
@@ -18,8 +18,8 @@ def visualize(mat):
     cmap = sns.diverging_palette(220, 10, as_cmap=True)
 
     # Draw the heatmap with the mask and correct aspect ratio
-    sns.heatmap(mat, cmap=cmap, vmax=1.0,
+    heatmap = sns.heatmap(mat, cmap=cmap, vmax=1.0,
                 square=True,
                 linewidths=.5, cbar_kws={"shrink": .5}, ax=ax)
 
-    sns.plt.show()
+    mpld3.fig_to_html(heatmap)

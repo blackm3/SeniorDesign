@@ -24,6 +24,10 @@ app.post('/v1/correlate', function(req, res) {
     let dataFile = req.files.srcData,
         corrMatrix = [];
 
+    if (fs.existsSync(path.join(__dirname, 'corrMatrix.json'))) {
+        fs.unlink(path.join(__dirname, 'corrMatrix.json'), (err) => { if (err) throw err; });
+    }
+
     dataFile.mv(path.join(__dirname, 'data.csv'), function(err) {
         if (err) {
             res.status(500).send(err);
@@ -31,7 +35,7 @@ app.post('/v1/correlate', function(req, res) {
             let pyShell = new PythonShell('Main.py');
             pyShell.on('message', function(message) {
                 corrMatrix = JSON.parse(message);
-                console.log(message);
+                console.log('PYSHELL:', message);
             });
             pyShell.end(function(err) {
                 if (err) {
@@ -49,7 +53,8 @@ app.post('/v1/correlate', function(req, res) {
 });
 
 app.get('/v1/visualize', function(req, res) {
-    let corrMatrix = require(path.join(__dirname, 'corrMatrix.json'));
+    let corrMatrix = JSON.parse(fs.readFileSync(path.join(__dirname, 'corrMatrix.json'), 'utf8'));
+    console.log('VISUALIZE:', corrMatrix);
     res.status(200).send(corrMatrix);
 });
 

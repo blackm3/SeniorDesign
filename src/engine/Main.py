@@ -10,6 +10,7 @@ import json
 import matplotlib.pyplot as plt
 from statsmodels.tsa import stattools, arima_model
 from scipy.stats import spearmanr
+from VisualizeMatrix import visualize
 
 # sample = 256 * np.pi
 # x = np.arange(sample)
@@ -38,7 +39,7 @@ with open(os.path.join(os.path.dirname(__file__), '../server/data.csv'), newline
 
     #acf = stattools.acf(data, fft=True, qstat=True, nlags=100)
     matrix = spearmanr(data).correlation
-
+    #visualize(matrix)
     print(json.dumps(matrix.tolist()))
 
     # model = arima_model.ARIMA(data, order=(5, 1, 0))

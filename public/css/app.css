@@ -9,12 +9,51 @@ div.upload {
     margin: 50px auto 0 auto;
 }
 
-.links line {
-    stroke: #999;
-    stroke-opacity: 0.6;
-}
-
 .nodes circle {
     stroke: #fff;
     stroke-width: 1.5px;
+}
+
+#svg_container {
+    display: inline-block;
+}
+
+svg {
+    border: solid lightgray 1px;
+    border-radius: 5px;
+    margin: 5px 0 0 5px;
+}
+
+#slider_container {
+    margin-left: 5px;
+}
+
+#slider {
+    width: 50%;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+#threshold {
+    display: inline-block;
+}
+
+#table_container {
+    display: inline-block;
+    top: auto;
+}
+
+#corrTable {
+    margin-left: 10px;
+}
+
+table th {
+    text-align: center;
+}
+
+img#vis_logo {
+    position: fixed;
+    width: 200px;
+    top: 10px;
+    right: 10px;
 }
