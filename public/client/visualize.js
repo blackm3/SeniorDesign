@@ -1,7 +1,8 @@
 'use strict';
 
-let RED = "#8B0000",
-    GREEN = "#008000";
+let RED = "#AF0000",
+    GREEN = "#008000",
+    HIGHLIGHT = "#1B9AE8";
 
 $(document).ready(function() {
     let corrMatrix;
@@ -11,9 +12,10 @@ $(document).ready(function() {
         url: '/v1/visualize',
         success: function(data) {
             corrMatrix = data;
+            let slider = $('#slider');
 
             //TODO:: Should be able to update SVG on slide rather than change - need to not regenerate each time
-            $('#slider').slider({
+            slider.slider({
                 min: 0.0,
                 max: 1.0,
                 step: 0.01,
@@ -38,32 +40,54 @@ $(document).ready(function() {
                                 $(this).css('background-color', color);
                             } else {
                                 if (Math.abs(corr) <= threshold) {
-                                    $(this).css('color', '#999');
+                                    $(this).css('color', '#DDD');
                                 } else {
                                     $(this).css('color', 'black');
                                 }
                             }
                         })
-                    })
+                    });
                 }
             });
 
-            let threshold = $('#slider').slider('value');
+            let threshold = slider.slider('value');
             $('#threshVal').text(threshold.toFixed(2));
 
             visualize(corrMatrix, threshold);
             makeTable(corrMatrix, threshold);
 
-            $('#corrTable td').hover(function() {
+            $('#corrTable').find('td').hover(function() {
                 let cell = $(this),
                     row = cell.attr('row'),
-                    col = cell.attr('col');
+                    col = cell.attr('col'),
+                    links = $('svg').find('.links');
+
                 cell.addClass('highlight');
-                $('#corrTable td[row="' + col + '"][col="' + row + '"]').addClass('highlight');
-                $('svg .links line[]').addClass('highlight');
+                $('#corrTable').find('td[row="' + col + '"][col="' + row + '"]').addClass('highlight');
+
+                let link = row > col //probably not necessary to do this all with ?:
+                    ? links.find('line[s="sensor_' + row + '"][t="sensor_' + col + '"]')
+                    : row < col
+                        ? links.find('line[s="sensor_' + col + '"][t="sensor_' + row + '"]')
+                        : null; //null if row == col
+
+                if (link) {
+                    console.log(link);
+                    link.css('stroke', HIGHLIGHT).addClass('link_highlight');
+                }
 
             }, function() {
-                $('#corrTable').find('.highlight').removeClass('highlight');
+                let cell = $(this),
+                    row = cell.attr('row'),
+                    col = cell.attr('col'),
+                    links = $('svg').find('.links'),
+                    table = $('#corrTable');
+
+                table.find('.highlight').removeClass('highlight');
+
+                let origColor = row > col ? $(this).css('background-color')
+                    : table.find('td[row="' + col + '"][col="' + row + '"]').css('background-color');
+                links.find('.link_highlight').removeClass('link_highlight').css('stroke', origColor);
             });
         },
         error: function() {
