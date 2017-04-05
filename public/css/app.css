@@ -47,6 +47,13 @@ svg {
     margin-left: 10px;
 }
 
+.highlight {
+    border: 2px solid #9ecaed !important;
+    border-radius: 2px;
+    outline: none;
+    box-shadow: 0 0 10px #9ecaed;
+}
+
 table th {
     text-align: center;
 }

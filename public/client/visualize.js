@@ -16,7 +16,7 @@ $(document).ready(function() {
             $('#slider').slider({
                 min: 0.0,
                 max: 1.0,
-                step: 0.001,
+                step: 0.01,
                 change: function(event, ui) {
                     if (!corrMatrix) {
                         //can this happen?
@@ -25,17 +25,23 @@ $(document).ready(function() {
                     }
                 },
                 slide: function(event, ui) {
-                    let threshold = ui.value.toFixed(3);
+                    let threshold = ui.value.toFixed(2);
                     $('#threshVal').text(threshold);
 
                     $('#corrTable tbody tr').each(function(row) {
                         $('td', this).each(function(col) {
+                            let corr = parseFloat($(this).attr('data-val'));
                             if (row > col) {
-                                let corr = parseFloat($(this).attr('data-val'));
                                 let color = Math.abs(corr) > threshold
                                     ? corr < 0 ? shadeColor2(RED, corr, threshold) : shadeColor2(GREEN, corr, threshold)
                                     : "#FFF";
                                 $(this).css('background-color', color);
+                            } else {
+                                if (Math.abs(corr) <= threshold) {
+                                    $(this).css('color', '#999');
+                                } else {
+                                    $(this).css('color', 'black');
+                                }
                             }
                         })
                     })
@@ -43,15 +49,29 @@ $(document).ready(function() {
             });
 
             let threshold = $('#slider').slider('value');
-            $('#threshVal').text(threshold.toFixed(3));
+            $('#threshVal').text(threshold.toFixed(2));
 
             visualize(corrMatrix, threshold);
             makeTable(corrMatrix, threshold);
+
+            $('#corrTable td').hover(function() {
+                let cell = $(this),
+                    row = cell.attr('row'),
+                    col = cell.attr('col');
+                cell.addClass('highlight');
+                $('#corrTable td[row="' + col + '"][col="' + row + '"]').addClass('highlight');
+                $('svg .links line[]').addClass('highlight');
+
+            }, function() {
+                $('#corrTable').find('.highlight').removeClass('highlight');
+            });
         },
         error: function() {
             alert('Error retrieving correlation data.');
         }
     });
+
+
 
 });
 
@@ -66,7 +86,7 @@ function visualize(corrMatrix, threshold) {
             "group": sNum
         });
         cArray.forEach(function(corr, tNum) {
-            if (tNum != sNum && Math.abs(corr) > threshold) {
+            if (tNum < sNum && Math.abs(corr) > threshold) {
                 links.push({
                     "source": curID,
                     "target": "sensor_" + tNum,
@@ -98,10 +118,14 @@ function visualize(corrMatrix, threshold) {
         .selectAll("line")
         .data(graph.links)
         .enter().append("line")
+        .attr('s', function(d) { return d.source})
+        .attr('t', function(d) { return d.target})
         .style("stroke", function(d) {
             return d.value < 0 ? shadeColor2(RED, d.value, threshold) : shadeColor2(GREEN, d.value, threshold);
         })
-        .style("stroke-width", function(d) { return Math.exp(2 * Math.abs(d.value)); });
+        .style("stroke-width", function(d) {
+            return Math.exp(2 * Math.abs(d.value));
+        });
 
     link.append("title").text(function(d) {return d.value.toFixed(3)});
 
@@ -162,14 +186,14 @@ function makeTable(corrMatrix, threshold) {
         cArray.forEach(function(corr, tNum) {
             if (tNum > sNum) {
                 let data = Math.abs(corr) > threshold ? corr.toFixed(3) : "";
-                trow.append('<td data-val=' + corr + '>' + data + '</td>');
+                trow.append('<td row="' + sNum + '" col="' + tNum + '" data-val=' + corr + '>' + data + '</td>');
             } else if (tNum < sNum) {
                 let color = Math.abs(corr) > threshold
                     ? corr < 0 ? shadeColor2(RED, corr, threshold) : shadeColor2(GREEN, corr, threshold)
                     : "#FFF";
-                trow.append('<td data-val=' + corr + ' bgcolor="' + color + '"></td>');
+                trow.append('<td row="' + sNum + '" col="' + tNum + '" data-val=' + corr + ' bgcolor="' + color + '"></td>');
             } else {
-                trow.append('<td>1.000</td>');
+                trow.append('<td><span style="visibility: hidden">' + corr.toFixed(3) + '</span></td>');
             }
         });
     });
