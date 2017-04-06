@@ -105,7 +105,7 @@ function visualize(corrMatrix, threshold) {
     //reverse traverse to capture sensor 0
     for (let sNum = corrMatrix.length - 1; sNum >= 0; sNum--) {
         let cArray = corrMatrix[sNum],
-            curID = "sensor_" + sNum;;
+            curID = "sensor_" + sNum;
 
         cArray.forEach(function(corr, tNum) {
             if (tNum < sNum && Math.abs(corr) > threshold) {

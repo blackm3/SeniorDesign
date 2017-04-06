@@ -16,7 +16,7 @@ app.use(fileUpload());
 app.use(express.static('public'));
 
 PythonShell.defaultOptions = {
-    scriptPath: path.join(__dirname, '../engine/'),
+    scriptPath: path.join(__dirname, '..', 'engine'),
     pythonPath: '/Library/Frameworks/Python.framework/Versions/3.5/bin/python3.5'
 };
 
@@ -54,7 +54,6 @@ app.post('/v1/correlate', function(req, res) {
 
 app.get('/v1/visualize', function(req, res) {
     let corrMatrix = JSON.parse(fs.readFileSync(path.join(__dirname, 'corrMatrix.json'), 'utf8'));
-    console.log('VISUALIZE:', corrMatrix);
     res.status(200).send(corrMatrix);
 });
 

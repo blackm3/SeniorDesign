@@ -29,7 +29,7 @@ from VisualizeMatrix import visualize
 # plt.plot(x, r)
 # plt.show()
 
-with open(os.path.join(os.path.dirname(__file__), '../server/data.csv'), newline='') as dataFile:
+with open(os.path.join(os.path.dirname(__file__), '..', 'server', 'data.csv'), newline='') as dataFile:
     cols = len(dataFile.readline().split(','))
     use_cols = [i for i in range(cols) if i % 2 != 0]
     data = pd.read_csv(dataFile,
