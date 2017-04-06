@@ -35,7 +35,7 @@ app.post('/v1/correlate', function(req, res) {
             let pyShell = new PythonShell('Main.py');
             pyShell.on('message', function(message) {
                 corrMatrix = JSON.parse(message);
-                console.log('PYSHELL:', message);
+                console.log(message);
             });
             pyShell.end(function(err) {
                 if (err) {

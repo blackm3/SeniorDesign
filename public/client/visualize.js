@@ -72,7 +72,6 @@ $(document).ready(function() {
                         : null; //null if row == col
 
                 if (link) {
-                    console.log(link);
                     link.css('stroke', HIGHLIGHT).addClass('link_highlight');
                 }
 
@@ -103,12 +102,11 @@ function visualize(corrMatrix, threshold) {
     let nodes = [],
         links = [];
 
-    corrMatrix.forEach(function(cArray, sNum) {
-        let curID = "sensor_" + sNum;
-        nodes.push({
-            "id": curID,
-            "group": sNum
-        });
+    //reverse traverse to capture sensor 0
+    for (let sNum = corrMatrix.length - 1; sNum >= 0; sNum--) {
+        let cArray = corrMatrix[sNum],
+            curID = "sensor_" + sNum;;
+
         cArray.forEach(function(corr, tNum) {
             if (tNum < sNum && Math.abs(corr) > threshold) {
                 links.push({
@@ -118,7 +116,17 @@ function visualize(corrMatrix, threshold) {
                 });
             }
         });
-    });
+
+        let curLinks = $.grep(links, function(link) { return link.source === curID || link.target === curID});
+        if (curLinks.length > 0) {
+            console.log('adding sensor ' + sNum);
+            nodes.push({
+                "id": curID,
+                "group": sNum
+            });
+        }
+    }
+
     let graph = {
         "nodes": nodes,
         "links": links
