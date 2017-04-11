@@ -1,16 +1,9 @@
 #Matt Black
 
-import CorrelationCoefficient as C
-import numpy as np
 import pandas as pd
-import VisualizeMatrix as V
-import csv
 import os
 import json
-import matplotlib.pyplot as plt
-from statsmodels.tsa import stattools, arima_model
 from scipy.stats import spearmanr
-from VisualizeMatrix import visualize
 
 # sample = 256 * np.pi
 # x = np.arange(sample)
@@ -29,7 +22,7 @@ from VisualizeMatrix import visualize
 # plt.plot(x, r)
 # plt.show()
 
-with open(os.path.join(os.path.dirname(__file__), '..', 'server', 'data.csv'), newline='') as dataFile:
+with open(os.path.join(os.path.dirname(__file__), '..', 'server', 'data.csv')) as dataFile:
     cols = len(dataFile.readline().split(','))
     use_cols = [i for i in range(cols) if i % 2 != 0]
     data = pd.read_csv(dataFile,
